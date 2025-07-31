@@ -4,39 +4,29 @@
 
 import os
 import sys
-import asyncio 
+import asyncio
+import psutil
+import time
+from os import environ, execle, system
 from database import Db, db
 from config import Config, temp
 from script import Script
 from pyrogram import Client, filters
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaDocument
-import psutil
-import time as time
-from os import environ, execle, system
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 START_TIME = time.time()
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
-
 main_buttons = [[
-    InlineKeyboardButton('❣️ ᴅᴇᴠᴇʟᴏᴘᴇʀ ❣️', url='https://t.me/kingvj01')
+    InlineKeyboardButton('🔰  ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ  🔰', url='https://t.me/WabXUpdates')
 ],[
-    InlineKeyboardButton('🔍 sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ', url='https://t.me/vj_bot_disscussion'),
-    InlineKeyboardButton('🤖 ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ', url='https://t.me/vj_botz')
-],[
-    InlineKeyboardButton('💝 sᴜʙsᴄʀɪʙᴇ ᴍʏ ʏᴏᴜᴛᴜʙᴇ ᴄʜᴀɴɴᴇʟ', url='https://youtube.com/@Tech_VJ')
+    InlineKeyboardButton('💬 sᴜᴘᴘᴏʀᴛ ɢʀᴏᴜᴘ', url='https://t.me/WabX_Support'),
+    InlineKeyboardButton('ᴅᴇᴠᴇʟᴏᴘᴇʀ 😇', url='https://t.me/MrThanos02')
 ],[
     InlineKeyboardButton('👨‍💻 ʜᴇʟᴘ', callback_data='help'),
-    InlineKeyboardButton('💁 ᴀʙᴏᴜᴛ', callback_data='about')
+    InlineKeyboardButton('sᴇᴛᴛɪɴɢs ⚙', callback_data='settings#main')
 ],[
-    InlineKeyboardButton('⚙ sᴇᴛᴛɪɴɢs', callback_data='settings#main')
+    InlineKeyboardButton('♊  ᴀʙᴏᴜᴛ  ♊', callback_data='about')
 ]]
-
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
 
 @Client.on_message(filters.private & filters.command(['start']))
 async def start(client, message):
@@ -49,10 +39,6 @@ async def start(client, message):
         reply_markup=reply_markup,
         text=Script.START_TXT.format(message.from_user.first_name))
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
-
 @Client.on_message(filters.private & filters.command(['restart']) & filters.user(Config.BOT_OWNER))
 async def restart(client, message):
     msg = await message.reply_text(text="<i>Trying to restarting.....</i>")
@@ -61,26 +47,16 @@ async def restart(client, message):
     system("git pull -f && pip3 install --no-cache-dir -r requirements.txt")
     execle(sys.executable, sys.executable, "main.py", environ)
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
-
 @Client.on_callback_query(filters.regex(r'^help'))
 async def helpcb(bot, query):
     buttons = [[
         InlineKeyboardButton('🤔 ʜᴏᴡ ᴛᴏ ᴜsᴇ ᴍᴇ ❓', callback_data='how_to_use')
     ],[
-        InlineKeyboardButton('Aʙᴏᴜᴛ ✨️', callback_data='about'),
+        InlineKeyboardButton('⪻ ʙᴀᴄᴋ', callback_data='back'),
         InlineKeyboardButton('⚙ Sᴇᴛᴛɪɴɢs', callback_data='settings#main')
-    ],[
-        InlineKeyboardButton('• back', callback_data='back')
     ]]
     reply_markup = InlineKeyboardMarkup(buttons)
     await query.message.edit_text(text=Script.HELP_TXT, reply_markup=reply_markup)
-
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
 
 @Client.on_callback_query(filters.regex(r'^how_to_use'))
 async def how_to_use(bot, query):
@@ -92,10 +68,6 @@ async def how_to_use(bot, query):
         disable_web_page_preview=True
     )
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
-
 @Client.on_callback_query(filters.regex(r'^back'))
 async def back(bot, query):
     reply_markup = InlineKeyboardMarkup(main_buttons)
@@ -103,14 +75,10 @@ async def back(bot, query):
        reply_markup=reply_markup,
        text=Script.START_TXT.format(query.from_user.first_name))
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
-
 @Client.on_callback_query(filters.regex(r'^about'))
 async def about(bot, query):
     buttons = [[
-         InlineKeyboardButton('• back', callback_data='help'),
+         InlineKeyboardButton('⪻ ʙᴀᴄᴋ', callback_data='help'),
          InlineKeyboardButton('Stats ✨️', callback_data='status')
     ]]
     reply_markup = InlineKeyboardMarkup(buttons)
@@ -120,17 +88,13 @@ async def about(bot, query):
         disable_web_page_preview=True
     )
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
-
 @Client.on_callback_query(filters.regex(r'^status'))
 async def status(bot, query):
     users_count, bots_count = await db.total_users_bots_count()
     forwardings = await db.forwad_count()
     upt = await get_bot_uptime(START_TIME)
     buttons = [[
-        InlineKeyboardButton('• back', callback_data='help'),
+        InlineKeyboardButton('⪻ ʙᴀᴄᴋ', callback_data='help'),
         InlineKeyboardButton('System Stats ✨️', callback_data='systm_sts'),
     ]]
     reply_markup = InlineKeyboardMarkup(buttons)
@@ -140,18 +104,14 @@ async def status(bot, query):
         disable_web_page_preview=True,
     )
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
-
 @Client.on_callback_query(filters.regex(r'^systm_sts'))
 async def sys_status(bot, query):
     buttons = [[InlineKeyboardButton('• back', callback_data='help')]]
     ram = psutil.virtual_memory().percent
     cpu = psutil.cpu_percent()
     disk_usage = psutil.disk_usage('/')
-    total_space = disk_usage.total / (1024**3)  # Convert to GB
-    used_space = disk_usage.used / (1024**3)    # Convert to GB
+    total_space = disk_usage.total / (1024**3)
+    used_space = disk_usage.used / (1024**3)
     free_space = disk_usage.free / (1024**3)
     text = f"""
 ╔════❰ sᴇʀᴠᴇʀ sᴛᴀᴛs  ❱═❍⊱❁۪۪
@@ -171,25 +131,17 @@ async def sys_status(bot, query):
         disable_web_page_preview=True,
     )
 
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
-
 async def get_bot_uptime(start_time):
-    # Calculate the uptime in seconds
     uptime_seconds = int(time.time() - start_time)
     uptime_minutes = uptime_seconds // 60
     uptime_hours = uptime_minutes // 60
     uptime_days = uptime_hours // 24
-    uptime_weeks = uptime_days // 7
     uptime_string = ""
-    if uptime_hours != 0:
+    if uptime_days > 0:
+        uptime_string += f" {uptime_days}D"
+    if uptime_hours > 0:
         uptime_string += f" {uptime_hours % 24}H"
-    if uptime_minutes != 0:
+    if uptime_minutes > 0:
         uptime_string += f" {uptime_minutes % 60}M"
     uptime_string += f" {uptime_seconds % 60} Sec"
-    return uptime_string   
-
-# Don't Remove Credit Tg - @VJ_Botz
-# Subscribe YouTube Channel For Amazing Bot https://youtube.com/@Tech_VJ
-# Ask Doubt on telegram @KingVJ01
+    return uptime_string
